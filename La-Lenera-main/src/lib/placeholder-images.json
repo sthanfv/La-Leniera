@@ -1,0 +1,10 @@
+{
+  "placeholderImages": [
+    {
+      "id": "laleñera-logo",
+      "description": "Logo for La Leñera, showing a stylized flame",
+      "imageUrl": "https://images.unsplash.com/photo-1738417281890-20775ffd331b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxmaXJld29vZCUyMGxvZ298ZW58MHx8fHwxNzY3OTY3MDUxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "firewood logo"
+    }
+  ]
+}
