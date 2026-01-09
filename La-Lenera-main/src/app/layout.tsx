@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   description: 'Venta de leña seleccionada y carbón a domicilio en Cúcuta. Packs Pa\'l Asado, Medio Viaje y Viaje Full. Pedidos rápidos por WhatsApp.',
   keywords: ['leña', 'carbon', 'asado', 'cucuta', 'domicilio', 'bbq'],
   verification: {
-    google: 'google-site-verification=CODIGO_AQUI', // Reemplazar con el código real de Search Console
+    google: 'google390e0a55723f2003',
   },
 };
 
