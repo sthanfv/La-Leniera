@@ -193,105 +193,110 @@ export default function Home() {
       <div className="fixed inset-0 z-0 opacity-[0.07] pointer-events-none mix-blend-overlay" style={{ backgroundImage: `url("${NOISE_SVG_URL}")` }} />
 
       {/* Card Container - Removed scroll, let it fit content naturally */}
-      <motion.article
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, type: 'spring' }}
-        className="relative z-10 w-full max-w-sm md:max-w-md bg-black/80 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,1)] overflow-visible flex flex-col p-6 gap-6"
-      >
-        <header className="text-center">
-          <HeatTitle />
-          <div className="flex items-center justify-center gap-2 -mt-4 opacity-70">
-            <MapPin className="w-3 h-3 text-orange-500" />
-            <span className="text-xs font-bold tracking-[0.4em] uppercase text-neutral-400">{CONFIG.city}</span>
-          </div>
-        </header>
+      <div className="relative w-full max-w-sm md:max-w-md">
+        {/* Backlight Glow Effect */}
+        <div className="absolute -inset-4 bg-gradient-to-b from-orange-500/30 via-orange-900/10 to-transparent blur-3xl opacity-70 pointer-events-none rounded-[3rem]" />
 
-        <div className="space-y-3">
-          {CONFIG.packs.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setSelectedPack(item)}
-              className={cn(`relative group w-full p-4 rounded-xl border transition-all duration-300`,
-                selectedPack.id === item.id
-                  ? 'bg-neutral-900 border-orange-500 shadow-lg shadow-orange-900/20'
-                  : 'bg-white/5 border-transparent hover:bg-white/10'
-              )}
-            >
-              {/* Glow Effect */}
-              {selectedPack.id === item.id && (
-                <motion.div layoutId="glow" className="absolute inset-0 bg-orange-500/5 rounded-xl" transition={{ duration: 0.2 }} />
-              )}
-
-              <div className="relative flex items-center gap-4 z-10">
-                <span className={cn("text-3xl transition-transform duration-300", selectedPack.id === item.id ? "text-orange-500 scale-110" : "text-neutral-500")}>
-                  {ICON_MAP[item.iconId as keyof typeof ICON_MAP]}
-                </span>
-                <div className="flex-1 text-left">
-                  <h3 className={cn(`font-bold text-lg leading-tight`, selectedPack.id === item.id ? 'text-white' : 'text-neutral-400')}>
-                    {item.title}
-                  </h3>
-                  <p className="text-xs text-neutral-500">{item.sub}</p>
-                </div>
-
-                <div className={cn(`w-5 h-5 rounded-full border flex items-center justify-center`, selectedPack.id === item.id ? 'border-orange-500' : 'border-neutral-700')}>
-                  {selectedPack.id === item.id && <motion.div layoutId="dot" className="w-2.5 h-2.5 bg-orange-500 rounded-full" />}
-                </div>
-              </div>
-            </button>
-          ))}
-        </div>
-
-        {/* Neighborhood Input with Autocomplete */}
-        <div className="relative z-50">
-          <div className={cn(`relative p-1 rounded-xl border-2 transition-all bg-black`, isValidZone ? 'border-green-800' : 'border-neutral-800 focus-within:border-orange-500')}>
-            <Navigation className={cn(`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4`, isValidZone ? 'text-green-500' : 'text-neutral-500')} />
-            <input
-              type="text"
-              placeholder="Escribe tu barrio..."
-              value={zone}
-              onChange={handleZoneChange}
-              onFocus={() => {
-                if (suggestions.length === 0) setSuggestions(getSuggestions(""));
-                setShowSuggestions(true);
-              }}
-              className="w-full bg-transparent py-4 pl-10 pr-10 text-base font-medium text-white placeholder-neutral-600 focus:outline-none capitalize"
-            />
-            {isValidZone && <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-green-500" />}
-          </div>
-
-          <AnimatePresence>
-            {showSuggestions && suggestions.length > 0 && !isValidZone && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="absolute top-full left-0 right-0 mt-2 bg-neutral-900 border border-neutral-800 rounded-xl shadow-2xl overflow-hidden z-50"
-              >
-                {suggestions.map(s => (
-                  <button key={s} onClick={() => selectSuggestion(s)} className="w-full text-left px-4 py-3 text-neutral-300 hover:bg-white/5 hover:text-white transition-colors border-b border-white/5 last:border-0">
-                    {s}
-                  </button>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        <MagneticButton
-          onClick={handleSubmit}
-          disabled={!isValidZone || status !== 'idle'}
-          className={cn(`w-full py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-all`,
-            isValidZone && status === 'idle'
-              ? 'bg-orange-600 text-white shadow-lg shadow-orange-900/40 hover:bg-orange-500'
-              : 'bg-neutral-800 text-neutral-500 cursor-not-allowed'
-          )}
+        <motion.article
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.8, type: 'spring' }}
+          className="relative z-10 w-full bg-black/80 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] overflow-visible flex flex-col p-6 gap-6"
         >
-          {status === 'calculating' ? <Zap className="w-5 h-5 animate-spin" /> : <MessageCircle className="w-5 h-5" />}
-          {status === 'calculating' ? 'ENVIANDO...' : status === 'cooldown' ? `ESPERE ${cooldown}s` : 'PEDIR POR WHATSAPP'}
-        </MagneticButton>
+          <header className="text-center">
+            <HeatTitle />
+            <div className="flex items-center justify-center gap-2 -mt-4 opacity-70">
+              <MapPin className="w-3 h-3 text-orange-500" />
+              <span className="text-xs font-bold tracking-[0.4em] uppercase text-neutral-400">{CONFIG.city}</span>
+            </div>
+          </header>
 
-      </motion.article>
+          <div className="space-y-3">
+            {CONFIG.packs.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => setSelectedPack(item)}
+                className={cn(`relative group w-full p-4 rounded-xl border transition-all duration-300`,
+                  selectedPack.id === item.id
+                    ? 'bg-neutral-900 border-orange-500 shadow-lg shadow-orange-900/20'
+                    : 'bg-white/5 border-transparent hover:bg-white/10'
+                )}
+              >
+                {/* Glow Effect */}
+                {selectedPack.id === item.id && (
+                  <motion.div layoutId="glow" className="absolute inset-0 bg-orange-500/5 rounded-xl" transition={{ duration: 0.2 }} />
+                )}
+
+                <div className="relative flex items-center gap-4 z-10">
+                  <span className={cn("text-3xl transition-transform duration-300", selectedPack.id === item.id ? "text-orange-500 scale-110" : "text-neutral-500")}>
+                    {ICON_MAP[item.iconId as keyof typeof ICON_MAP]}
+                  </span>
+                  <div className="flex-1 text-left">
+                    <h3 className={cn(`font-bold text-lg leading-tight`, selectedPack.id === item.id ? 'text-white' : 'text-neutral-400')}>
+                      {item.title}
+                    </h3>
+                    <p className="text-xs text-neutral-500">{item.sub}</p>
+                  </div>
+
+                  <div className={cn(`w-5 h-5 rounded-full border flex items-center justify-center`, selectedPack.id === item.id ? 'border-orange-500' : 'border-neutral-700')}>
+                    {selectedPack.id === item.id && <motion.div layoutId="dot" className="w-2.5 h-2.5 bg-orange-500 rounded-full" />}
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+
+          {/* Neighborhood Input with Autocomplete */}
+          <div className="relative z-50">
+            <div className={cn(`relative p-1 rounded-xl border-2 transition-all bg-black`, isValidZone ? 'border-green-800' : 'border-neutral-800 focus-within:border-orange-500')}>
+              <Navigation className={cn(`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4`, isValidZone ? 'text-green-500' : 'text-neutral-500')} />
+              <input
+                type="text"
+                placeholder="Escribe tu barrio..."
+                value={zone}
+                onChange={handleZoneChange}
+                onFocus={() => {
+                  if (suggestions.length === 0) setSuggestions(getSuggestions(""));
+                  setShowSuggestions(true);
+                }}
+                className="w-full bg-transparent py-4 pl-10 pr-10 text-base font-medium text-white placeholder-neutral-600 focus:outline-none capitalize"
+              />
+              {isValidZone && <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-green-500" />}
+            </div>
+
+            <AnimatePresence>
+              {showSuggestions && suggestions.length > 0 && !isValidZone && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="absolute top-full left-0 right-0 mt-2 bg-neutral-900 border border-neutral-800 rounded-xl shadow-2xl overflow-hidden z-50"
+                >
+                  {suggestions.map(s => (
+                    <button key={s} onClick={() => selectSuggestion(s)} className="w-full text-left px-4 py-3 text-neutral-300 hover:bg-white/5 hover:text-white transition-colors border-b border-white/5 last:border-0">
+                      {s}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          <MagneticButton
+            onClick={handleSubmit}
+            disabled={!isValidZone || status !== 'idle'}
+            className={cn(`w-full py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 transition-all`,
+              isValidZone && status === 'idle'
+                ? 'bg-orange-600 text-white shadow-lg shadow-orange-900/40 hover:bg-orange-500'
+                : 'bg-neutral-800 text-neutral-500 cursor-not-allowed'
+            )}
+          >
+            {status === 'calculating' ? <Zap className="w-5 h-5 animate-spin" /> : <MessageCircle className="w-5 h-5" />}
+            {status === 'calculating' ? 'ENVIANDO...' : status === 'cooldown' ? `ESPERE ${cooldown}s` : 'PEDIR POR WHATSAPP'}
+          </MagneticButton>
+
+        </motion.article>
+      </div>
     </main>
   );
 }
