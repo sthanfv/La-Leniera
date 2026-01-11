@@ -560,7 +560,7 @@ export default function Home() {
                           className="flex items-center gap-2"
                         >
                           <MessageCircle className="w-6 h-6" />
-                          <span className="uppercase tracking-[0.2em] text-xs font-black">Formalizar pedido</span>
+                          <span className="uppercase tracking-[0.2em] text-xs font-black">Solicitar despacho</span>
                         </motion.div>
                       )}
                     </AnimatePresence>
