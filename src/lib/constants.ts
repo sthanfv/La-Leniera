@@ -44,8 +44,8 @@ export const CONFIG = {
 
   // Configuración de Horarios (Formato 24h)
   schedule: {
-    startHour: 8, // 8 AM
-    endHour: 21,  // 9 PM
+    startHour: 7, // 7 AM
+    endHour: 18,  // 6 PM
     timezone: 'America/Bogota'
   },
 

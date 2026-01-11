@@ -10,14 +10,18 @@ export const useBusinessHours = () => {
 
     useEffect(() => {
         const checkAvailability = () => {
-            // Obtener hora actual en Colombia
-            // Truco simple: new Date().getHours() toma la hora local del usuario. 
-            // Para ser exactos con el negocio, idealmente usaríamos una API o server time,
-            // pero para UX inmedia "client-side" esto funciona bien si el usuario está en la misma zona (99% casos).
-            const now = new Date();
-            const currentHour = now.getHours();
+            // Obtener hora actual en la zona horaria configurada (Colombia)
+            // Usamos Intl.DateTimeFormat para obtener la hora exacta en la zona horaria destino
+            const { startHour, endHour, timezone } = CONFIG.schedule;
 
-            const { startHour, endHour } = CONFIG.schedule;
+            const now = new Date();
+            const colombiaTime = new Intl.DateTimeFormat('en-US', {
+                timeZone: timezone,
+                hour: 'numeric',
+                hour12: false
+            }).format(now);
+
+            const currentHour = parseInt(colombiaTime, 10);
 
             // Está abierto si la hora actual es >= inicio Y < fin
             const isWorkingHours = currentHour >= startHour && currentHour < endHour;
@@ -26,7 +30,7 @@ export const useBusinessHours = () => {
         };
 
         checkAvailability();
-        const interval = setInterval(checkAvailability, 60000); // Chequear cada minuto
+        const interval = setInterval(checkAvailability, 30000); // Chequear cada 30 segundos para mayor precisión
 
         return () => clearInterval(interval);
     }, []);
